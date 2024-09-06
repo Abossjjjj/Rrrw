@@ -1,0 +1,60 @@
+{
+  "userVisits": {},
+  "platformVisits": {},
+  "allUsers": [
+    [
+      "7130416076",
+      {
+        "id": 7130416076,
+        "firstName": "entity",
+        "lastName": "",
+        "username": "SJhhjjk",
+        "points": 10
+      }
+    ],
+    [
+      "6716608590",
+      {
+        "id": 6716608590,
+        "firstName": "ه",
+        "lastName": "ه",
+        "username": "S_FFDA",
+        "points": 10
+      }
+    ],
+    [
+      "5706417405",
+      {
+        "id": 5706417405,
+        "firstName": "𝐒𝐉𝐆𝐃 𖡔️️",
+        "lastName": "",
+        "username": "SAGD112",
+        "points": 10
+      }
+    ]
+  ],
+  "activatedUsers": [],
+  "bannedUsers": [],
+  "subscribedUsers": [
+    "7130416076",
+    "6716608590",
+    "5706417405"
+  ],
+  "userPoints": [
+    [
+      "7130416076",
+      10
+    ],
+    [
+      "6716608590",
+      10
+    ],
+    [
+      "5706417405",
+      10
+    ]
+  ],
+  "userReferrals": [],
+  "usedReferralLinks": [],
+  "pointsRequiredForSubscription": 15
+}
